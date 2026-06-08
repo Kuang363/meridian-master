@@ -269,6 +269,16 @@ class _HomePageState extends State<HomePage> {
     final m = meridians[index % 12];
     return isChinese ? m["name"] : m["en"];
   }
+    Color _getElementColor(String element) {
+    switch (element) {
+      case "木": return Colors.green[700]!;
+      case "火": return Colors.red[700]!;
+      case "土": return Colors.orange[700]!;
+      case "金": return Colors.grey[700]!;
+      case "水": return Colors.blue[700]!;
+      default: return Colors.green[700]!;
+    }
+  }
 
   void openDetail(Map<String, dynamic> m) {
     showDialog(
@@ -286,7 +296,10 @@ class _HomePageState extends State<HomePage> {
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           child: ListTile(
-            leading: CircleAvatar(backgroundColor: Colors.green[100], child: Text(m["element"])),
+              leading: CircleAvatar(
+              backgroundColor: _getElementColor(m["element"]),
+              child: Text(m["element"], style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+            ),
             title: Text(isChinese ? m["name"] : m["en"]),
             subtitle: Text("${m["organ"]}　${m["time"]}点"),
             onTap: () => openDetail(m),
@@ -296,60 +309,52 @@ class _HomePageState extends State<HomePage> {
     );
   }
         Widget _buildBodyMap() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 左侧 - 阴经原穴
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(isChinese ? "阴经原穴（补虚养本）" : "Yuan Points of Yin Meridians (Tonify Deficiency)", 
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green)),
-                const SizedBox(height: 4),
-                Text(isChinese 
-                    ? "原穴是本经气血汇聚的根本穴位，阴经多虚证，用原穴补虚养本效果最佳，能直接调补相应脏腑之本。"
-                    : "Yuan points are source points of Qi & Blood. Best for tonifying deficiency in Yin meridians.",
-                    style: const TextStyle(fontSize: 13, height: 1.35)),
-                const SizedBox(height: 8),
-                _buildAcupointListItem("太渊 (肺原)", "手太阴肺经", "腕横纹桡侧凹陷处"),
-                _buildAcupointListItem("神门 (心原)", "手少阴心经", "腕横纹尺侧凹陷处"),
-                _buildAcupointListItem("大陵 (心包原)", "手厥阴心包经", "腕横纹中央"),
-                _buildAcupointListItem("太白 (脾原)", "足太阴脾经", "足大趾本节后凹陷处"),
-                _buildAcupointListItem("太溪 (肾原)", "足少阴肾经", "内踝后凹陷处"),
-                _buildAcupointListItem("太冲 (肝原)", "足厥阴肝经", "足背第1、2跖骨间凹陷处"),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          // 右侧 - 阳经合穴
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(isChinese ? "阳经合穴（泻实清热）" : "He-Sea Points of Yang Meridians (Drain Excess & Clear Heat)", 
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green)),
-                const SizedBox(height: 4),
-                Text(isChinese 
-                    ? "合穴位于肘膝关节附近，气血最旺盛，如水汇入大海。阳经多实证，用合穴泻实清热、止痛通络效果显著。"
-                    : "He-Sea points near elbow/knee joints. Best for draining excess & clearing heat in Yang meridians.",   
-                   style: const TextStyle(fontSize: 13, height: 1.35)),
-                const SizedBox(height: 8),
-                _buildAcupointListItem("曲池 (大肠合)", "手阳明大肠经", "屈肘横纹外端"),
-                _buildAcupointListItem("小海 (小肠合)", "手太阳小肠经", "屈肘尺骨鹰嘴处"),
-                _buildAcupointListItem("天井 (三焦合)", "手少阳三焦经", "屈肘尺骨鹰嘴上1寸"),
-                _buildAcupointListItem("足三里 (胃合)", "足阳明胃经", "膝下4横指，胫骨外侧"),
-                _buildAcupointListItem("委中 (膀胱合)", "足太阳膀胱经", "膝窝正中横纹处"),
-                _buildAcupointListItem("阳陵泉 (胆合)", "足少阳胆经", "腓骨小头前下方凹陷"),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        // 页面标题
+        Text(isChinese ? "日常保健取穴" : "Daily Health Acupoints", 
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green)),
+        const SizedBox(height: 12),
+
+        // 阴经原穴部分
+        Text(isChinese ? "阴经原穴（补虚养本）" : "Yuan Points of Yin Meridians (Tonify Deficiency)", 
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.green)),
+        const SizedBox(height: 8),
+        Text(isChinese 
+            ? "原穴是本经气血汇聚的根本穴位，也是脏腑精气输注于体表的部位。阴经多虚证，用原穴补虚养本效果最佳，能直接调补相应脏腑之本，是日常保健最常用的补法穴位。"
+            : "Yuan points are the source points where the meridian's Qi and Blood gather, and where the organs' essence is infused. Best for tonifying deficiency in Yin meridians.",
+            style: const TextStyle(fontSize: 14, height: 1.45)),
+        const SizedBox(height: 12),
+
+        _buildAcupointListItem("太渊 (肺原)", "手太阴肺经", "腕横纹桡侧凹陷处"),
+        _buildAcupointListItem("神门 (心原)", "手少阴心经", "腕横纹尺侧凹陷处"),
+        _buildAcupointListItem("大陵 (心包原)", "手厥阴心包经", "腕横纹中央"),
+        _buildAcupointListItem("太白 (脾原)", "足太阴脾经", "足大趾本节后凹陷处"),
+        _buildAcupointListItem("太溪 (肾原)", "足少阴肾经", "内踝后凹陷处"),
+        _buildAcupointListItem("太冲 (肝原)", "足厥阴肝经", "足背第1、2跖骨间凹陷处"),
+
+        const SizedBox(height: 28),
+
+        // 阳经合穴部分
+        Text(isChinese ? "阳经合穴（泻实清热）" : "He-Sea Points of Yang Meridians (Drain Excess)", 
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.green)),
+        const SizedBox(height: 8),
+        Text(isChinese 
+            ? "合穴位于肘膝关节附近，如江河之水汇入大海，气血最为旺盛。阳经多实证、热证，用合穴泻实清热、止痛通络效果显著，是日常保健中最常用的泻法穴位。"
+            : "He-Sea points are located near elbow and knee joints where Qi and Blood are most abundant. Best for draining excess and clearing heat in Yang meridians.",
+            style: const TextStyle(fontSize: 14, height: 1.45)),
+        const SizedBox(height: 12),
+
+        _buildAcupointListItem("曲池 (大肠合)", "手阳明大肠经", "屈肘横纹外端"),
+        _buildAcupointListItem("小海 (小肠合)", "手太阳小肠经", "屈肘尺骨鹰嘴处"),
+        _buildAcupointListItem("天井 (三焦合)", "手少阳三焦经", "屈肘尺骨鹰嘴上1寸"),
+        _buildAcupointListItem("足三里 (胃合)", "足阳明胃经", "膝下4横指，胫骨外侧"),
+        _buildAcupointListItem("委中 (膀胱合)", "足太阳膀胱经", "膝窝正中横纹处"),
+        _buildAcupointListItem("阳陵泉 (胆合)", "足少阳胆经", "腓骨小头前下方凹陷"),
+      ],
     );
-  }
+  }   
 
     String _getEnAcupointName(String name) {
     if (name.contains("太渊")) return "Taiyuan (LU9)";
@@ -541,6 +546,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isChinese ? '十二经脉学习' : 'Meridian Master'),
+        centerTitle: true,
         backgroundColor: Colors.green[700],
         actions: [
           IconButton(
