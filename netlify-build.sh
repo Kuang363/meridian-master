@@ -9,4 +9,4 @@ fi
 
 flutter --version
 flutter pub get
-flutter build web --release --web-renderer html
+flutter build web --release 
